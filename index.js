@@ -25,6 +25,15 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+
+    const toysCollection = client.db("infinityToyland").collection("toys");
+
+    // API: toys info save to db
+    app.post('/toys', async(req, res)=> {
+        const toy = req.body;
+        const result = await toysCollection.insertOne(toy);
+        res.send(result);
+    })
    
     await client.db("admin").command({ ping: 1 });
     console.log("successfully connected to MongoDB!");
@@ -34,9 +43,12 @@ async function run() {
 }
 run().catch(console.dir);
 
-
 // mongodb end
 
+//  get response from server
+app.get('/', (req, res)=> {
+    res.send('<h1>Infinity Toyland Server Running</h1>')
+})
 
 // server listening
 app.listen(PORT, ()=> {

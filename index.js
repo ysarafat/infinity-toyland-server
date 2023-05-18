@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express();
@@ -47,9 +47,17 @@ async function run() {
       const query = {sellerEmail: userEmail}
       const result = await toysCollection.find(query).toArray();
       res.send(result)
-      
-      
     })
+
+    // delete toy 
+    app.delete('/my-toys/:id', async(req,res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await toysCollection.deleteOne(query)
+      res.send(result)
+
+ })
+
    
     await client.db("admin").command({ ping: 1 });
     console.log("successfully connected to MongoDB!");

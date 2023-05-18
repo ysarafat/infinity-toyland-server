@@ -56,7 +56,19 @@ async function run() {
       const result = await toysCollection.find(query).toArray();
       res.send(result)
     })
-    
+    // update or edit my toy 
+    app.patch('/my-toys/:id', async(req, res) => {
+      const toyUpdateData = req.body;
+      const id = req.params.id
+      const filter = {_id: new ObjectId(id)}
+      const updateToy = {
+        $set: {
+          ...toyUpdateData
+        }
+      }
+      const result = await toysCollection.updateOne(filter, updateToy);
+      res.send(result);
+    })
 
     // delete toy 
     app.delete('/my-toys/:id', async(req,res) =>{

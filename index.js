@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+     client.connect();
 
     const toysCollection = client.db("infinityToyland").collection("toys");
 
@@ -33,6 +33,22 @@ async function run() {
         const toy = req.body;
         const result = await toysCollection.insertOne(toy);
         res.send(result);
+    })
+
+    // API : get all toys
+    app.get('/toys', async(req, res) => {
+      const result = await toysCollection.find().toArray();
+      res.send(result)
+    })
+
+    //  get specific user data
+    app.get('/my-toys', async(req, res)=>{
+      const userEmail = req.query.email;
+      const query = {sellerEmail: userEmail}
+      const result = await toysCollection.find(query).toArray();
+      res.send(result)
+      
+      
     })
    
     await client.db("admin").command({ ping: 1 });

@@ -28,6 +28,17 @@ async function run() {
 
     const toysCollection = client.db("infinityToyland").collection("toys");
 
+ toysCollection.createIndex({name: 1}, {name : "toyTitle"})
+
+    // search by toy title 
+    app.get('/searchToy/:title', async(req, res) => {
+      const title = req.params.title;
+      const query = {name: {$regex: title, $options: "i"}}
+      const result = await toysCollection.find(query).toArray();
+      res.send(result)
+      
+    })
+
     // API: toys info save to db
     app.post('/toys', async(req, res)=> {
         const toy = req.body;
@@ -86,8 +97,7 @@ async function run() {
       const query = {_id: new ObjectId(id)}
       const result = await toysCollection.deleteOne(query)
       res.send(result)
-
- })
+   })
 
    
     await client.db("admin").command({ ping: 1 });

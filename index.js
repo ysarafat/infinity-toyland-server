@@ -70,6 +70,16 @@ async function run() {
       res.send(result);
     })
 
+    // toy search by category
+    app.get('/category/:scg', async(req, res)=>{
+      const subCategory = req.params.scg;
+      const query = {category: subCategory}
+      const result = await toysCollection.find(query).toArray();
+      res.send(result)
+      
+    })
+  
+
     // delete toy 
     app.delete('/my-toys/:id', async(req,res) =>{
       const id = req.params.id;

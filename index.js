@@ -63,8 +63,9 @@ async function run() {
     //  get specific user data
     app.get('/my-toys', async(req, res)=>{
       const userEmail = req.query.email;
+      const sort = parseInt(req.query.sort);
       const query = {sellerEmail: userEmail}
-      const result = await toysCollection.find(query).toArray();
+      const result = await toysCollection.find(query).sort({price: sort}).toArray();
       res.send(result)
     })
     // update or edit my toy 

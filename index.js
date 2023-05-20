@@ -56,8 +56,10 @@ async function run() {
 
     // API : get all toys
     app.get('/toys', async(req, res) => {
-      const result = await toysCollection.find().toArray();
-      res.send(result)
+      const result = await toysCollection.find().limit(20).toArray();
+      const toys = result.reverse()
+
+      res.send(toys)
     })
 
     //  get specific user data
